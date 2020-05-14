@@ -9,6 +9,7 @@ import Home from "./components/Home";
 
 class App extends Component {
 
+  API_URL = process.env.REACT_APP_API_URL;
 
   render() {
     return (
@@ -18,17 +19,17 @@ class App extends Component {
             <div className="collpase navbar-collapse">
               <ul className="navbar-nav mr-auto">
                 <li className="navbar-item">
-                  <Link to="/home" className="nav-link">
+                  <Link to="/api/home" className="nav-link">
                     Home
                   </Link>
                 </li>
                 <li className="navbar-item">
-                  <Link to="/post" className="nav-link">
+                  <Link to="/api/post/" className="nav-link">
                     Post questions
                   </Link>
                 </li>
                 <li className="navbar-item">
-                  <Link to="/questions" className="nav-link">
+                  <Link to="/api/questions/" className="nav-link">
                     Questions List
                   </Link>
                 </li>
@@ -38,11 +39,11 @@ class App extends Component {
           <img class="image" src="https://res.cloudinary.com/dedpxe9qh/image/upload/v1587370289/stackoverflow-header_vnsdgy.png" alt="stackoverflow-header" border="0"/>
           <br />
           <Switch>
-            <Route path="/home/" component={Home}/>
-            <Route path="/post/" component={PostQuestion} />
-            <Route path="/questions/" component={QuestionList} />
+            <Route path="/api/home/" component={Home}/>
+            <Route path="/api/post/" component={PostQuestion}/>
+            <Route path="/api/questions/"  component={QuestionList}/>
             <Route
-              path="/Question&Answers/:id"
+              path="/api/Question&Answers/:id"
               render={props => <QuestionLink {...props} />}
             />
           </Switch>

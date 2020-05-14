@@ -8,21 +8,24 @@ const Question = props => (
     <td>{props.question.question_title}</td>
     <td>{props.question.question_input}</td>
     <td>
-      <Link to={"/Question&Answers/" + props.question._id}>Answer</Link>
+      <Link to={"/api/Question&Answers/" + props.question._id} className="btn btn-outline-success">Answer</Link>
     </td>
   </tr>
 );
 
 class QuestionList extends Component {
+
     API_URL = process.env.REACT_APP_API_URL;
+
     constructor(props) {
     super(props);
     this.state = { questions: [] };
   }
 
   componentDidMount() {
+
     axios
-      .get("http://localhost:8080/questions/")
+      .get(`${this.API_URL}/questions`)
       .then(response => {
         this.setState({ questions: response.data });
       })

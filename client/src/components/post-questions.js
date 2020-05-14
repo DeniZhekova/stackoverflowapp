@@ -4,6 +4,9 @@ import "./style.css";
 
 
 class PostQuestion extends Component {
+
+  API_URL = process.env.REACT_APP_API_URL;
+
   /*  First we start by adding a constructor to the component class.
    Inside the constructor we’re setting the initial state of the component by assigned an object to this.state */
   constructor(props) {
@@ -62,7 +65,7 @@ class PostQuestion extends Component {
 
 
     axios
-      .post("http://localhost:8080/questions/add", newQuestion)
+      .post(`${this.API_URL}/add`, newQuestion)
       .then(res => console.log(res.data));
 
     this.setState({

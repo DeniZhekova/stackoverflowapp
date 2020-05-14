@@ -57,7 +57,7 @@ answerRoutes.route("/").get(function(req, res) {
   });
 });
 
-questionRoutes.route("/questions/:id/answers/").get(function(req, res) {
+questionRoutes.route("/api/questions/:id/answers/").get(function(req, res) {
   let id = req.params.id;
   Qs.findById(id, function(err, question) {
     if (err) {
@@ -71,14 +71,14 @@ questionRoutes.route("/questions/:id/answers/").get(function(req, res) {
 /*Here we’re accepting the URL parameter id which can be accessed via req.params.id.
 This id is passed into the call of Qs.findById to retrieve an issue item based on it’s ID.
  Once the question object is available it is attached to the HTTP response in JSON format*/
-questionRoutes.route("/:id").get(function(req, res) {
+questionRoutes.route("/api/:id").get(function(req, res) {
   let id = req.params.id;
   Qs.findById(id, function(err, question) {
     res.json(question);
   });
 });
 
-answerRoutes.route("/:id").get(function(req, res) {
+answerRoutes.route("/api/:id").get(function(req, res) {
   let id = req.params.id;
   answer.findById(id, function(err, answers) {
     res.json(answers);
@@ -88,7 +88,7 @@ answerRoutes.route("/:id").get(function(req, res) {
 /*The new question item is part the the HTTP POST request body, so that we’re able to
  access it view req.body and therewith create a new instance of Question. This new item
  is then saved to the database by calling the save method. */
-questionRoutes.route("/add").post(function(req, res) {
+questionRoutes.route("/api/add/").post(function(req, res) {
   let question = new Qs(req.body);
   question
     .save()
@@ -100,7 +100,7 @@ questionRoutes.route("/add").post(function(req, res) {
     });
 });
 
-answerRoutes.route("/addAnswers").post(function(req, res) {
+answerRoutes.route("/api/answers/addAnswers/").post(function(req, res) {
   let answers = new answer(req.body);
   answers
     .save()
@@ -112,11 +112,16 @@ answerRoutes.route("/addAnswers").post(function(req, res) {
     });
 });
 
-app.use("/questions", questionRoutes);
+app.use("/api/questions/", questionRoutes);
+
+// "Redirect" all get requests (except for the routes specified above) to React's entry point (index.html) to be handled by Reach router
+// It's important to specify this route as the very last one to prevent overriding all of the other routes
+app.get('*', (req, res) =>
+    res.sendFile(path.resolve('..', 'client', 'build', 'index.html'))
+);
 
 
-
-app.use("/answers", answerRoutes);
+app.use("/api/answers/", answerRoutes);
 app.listen(PORT, function() {
   console.log("Server is running on Port: " + PORT);
 });

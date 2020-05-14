@@ -8,10 +8,10 @@ const Answers = props => (
   <tr>
     <td>{props.answers.author}</td>
     <td>{props.answers.text}</td>
-    <td>{props.answers.rating}</td>
-    <td><h6>1</h6></td>
+    <td>{props.answers.votes}</td>
+    {" "}
+
     <td><button  id="upvote">Upvote</button></td>
-    <td><button id="downvote">Downvote</button></td>
   </tr>
 
 //onClick={this.increment} and decrement onClick for buttons
@@ -20,6 +20,8 @@ const Answers = props => (
 );
 
 class QuestionLink extends Component {
+  API_URL = process.env.REACT_APP_API_URL;
+
   constructor(props) {
     super(props);
 
@@ -53,17 +55,20 @@ class QuestionLink extends Component {
     const newAnswers = {
       author: this.state.author,
       text: this.state.text,
-      answersToQuestion: this.props.match.params.id
+      answersToQuestion: this.props.match.params.id,
+      votes: 0
     };
 
+
     axios
-      .post("http://localhost:8080/answers/addAnswers/", newAnswers)
+      .post(`${this.API_URL}/answers/addAnswers/`, newAnswers)
       .then(res => console.log(res.data));
 
     this.setState({
       author: "",
       text: "",
-      answersToQuestion: this.props.match.params.id
+      answersToQuestion: this.props.match.params.id,
+      votes: 0
     });
   }
 
@@ -71,7 +76,8 @@ class QuestionLink extends Component {
     this.setState({
       answersToQuestion: this.props.match.params.id
     });
-    axios.get("http://localhost:8080/questions/").then(response => {
+
+    axios.get(`${this.API_URL}/questions`).then(response => {
       this.setState({
         currentQuestion: response.data.find(
           elm => elm._id === this.props.match.params.id
@@ -79,8 +85,9 @@ class QuestionLink extends Component {
       });
     });
 
+
     axios
-      .get("http://localhost:8080/answers/")
+      .get(`${this.API_URL}/answers`)
       .then(response => {
         this.setState({ answers: response.data });
       })
